@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -98,4 +100,11 @@ public class RecipeService {
         logger.info("createRecipe - END");
         return EntityModel.of(recipeResponse);
     }
+
+    public EntityModel<RecipeResponse>  deleteRecipe(@PathVariable Long id) {
+        EntityModel<RecipeResponse> recipeResponseEntityModel = retrieveRecipe(id);
+        recipeRepository.deleteById(id);
+        return recipeResponseEntityModel;
+    }
+
 }

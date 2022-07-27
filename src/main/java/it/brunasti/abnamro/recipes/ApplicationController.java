@@ -5,6 +5,7 @@ import it.brunasti.abnamro.recipes.requests.NewRecipeRequest;
 import it.brunasti.abnamro.recipes.responses.RecipeResponse;
 import it.brunasti.abnamro.recipes.services.RecipeService;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,19 +29,14 @@ class ApplicationController {
 		return recipeService.retrieveRecipe(id);
 	}
 
+	@DeleteMapping("/recipes/{id}")
+	EntityModel<RecipeResponse> deleteRecipe(@PathVariable Long id) {
+		return recipeService.deleteRecipe(id);
+	}
 
 	@PostMapping("/recipes")
 	EntityModel<RecipeResponse> createRecipe(@RequestBody NewRecipeRequest newRecipe) {
 		return recipeService.createRecipe(newRecipe,"paolo");
-//		return repository.findById(id) //
-//				.map(recipe -> {
-//					recipe.setName(newRecipe.getName());
-//					return repository.save(recipe);
-//				}) //
-//				.orElseGet(() -> {
-//					newRecipe.setId(id);
-//					return repository.save(newRecipe);
-//				});
 	}
 
 
