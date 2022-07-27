@@ -21,7 +21,7 @@ import javax.persistence.Id;
 public class Recipe {
 
     private @Id @GeneratedValue Long id;
-    private Long ownerId;
+    private String ownerId;
     private String name;
     private String instructions;
     private int servings;

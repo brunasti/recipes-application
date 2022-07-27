@@ -2,13 +2,14 @@
 
 ## Layering
 
-The Recipes application has four layers:
+The Recipes application (as most of Spring Boot applications) has four layers:
 
 + Presentation Layer – Authentication & Json Translation
 + Business Layer – Business Logic, Validation & Authorization
 + Persistence Layer – Storage Logic
 + Database Layer – Actual Database (H2)
 
+![Spring architecture flow](../images/spring-boot-architecture.png)
 
 
 
@@ -27,7 +28,7 @@ The spring boot performs all the logic over the data of the database which is ma
 
 The JSON content is returned as Response from the controller.
 
-![Spring architecture flow](../images/architecture-flow.png)
+![Spring architecture flow](../images/spring-boot-architecture2.png)
 
 
 ## Security

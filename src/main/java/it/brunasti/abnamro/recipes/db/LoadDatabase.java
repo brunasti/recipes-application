@@ -17,7 +17,8 @@ class LoadDatabase {
 	CommandLineRunner initDatabase(ApplicationUserReporitory applicationUserReporitory, RecipeRepository recipeRepository, IngredientRepository ingredientRepository, RecipeIngredientRelationRepository recipeIngredientRelationRepository) {
 
 		return args -> {
-			ApplicationUser user = ApplicationUser.builder().name("Paolo").build();
+			String userId = "paolo";
+			ApplicationUser user = ApplicationUser.builder().id(userId).username("Paolo").password("Brunasti").build();
 			log.info("Preloading " + applicationUserReporitory.save(user));
 
 			Recipe spaghettiAlBurro = Recipe.builder().ownerId(user.getId()).name("spaghetti al burro").instructions("Boil water").servings(2).build();

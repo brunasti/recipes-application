@@ -20,36 +20,63 @@ public class JPAApplicationUserUnitTest {
     @Test
     public void save_user() {
         ApplicationUser applicationUser = applicationUserReporitory.save(
-                ApplicationUser.builder().name("Paolo").build()
+                ApplicationUser.builder().id("paolo").username("Paolo").build()
         );
-        assertThat(applicationUser).hasFieldOrPropertyWithValue("name", "Paolo");
+        assertThat(applicationUser).hasFieldOrPropertyWithValue("username", "Paolo");
     }
 
     @Test
     public void should_find_user() {
-        Long paoloId;
+        String paoloId;
         ApplicationUser applicationUser = applicationUserReporitory.save(
-                ApplicationUser.builder().name("Paolo").build()
+                ApplicationUser.builder().id("paolo").username("Paolo").build()
         );
         paoloId = applicationUser.getId();
 
         applicationUserReporitory.save(
-                ApplicationUser.builder().name("Mario").build()
+                ApplicationUser.builder().id("mario").username("Mario").build()
         );
 
         Optional<ApplicationUser> findApplicationUser = applicationUserReporitory.findById(paoloId);
         assert(findApplicationUser.isPresent());
-        assertThat(findApplicationUser.get()).hasFieldOrPropertyWithValue("name", "Paolo");
+        assertThat(findApplicationUser.get()).hasFieldOrPropertyWithValue("username", "Paolo");
+    }
+
+    @Test
+    public void should_fail_create_double_user() {
+        String paoloId = "paolo";
+        ApplicationUser applicationUser = applicationUserReporitory.save(
+                ApplicationUser.builder().id(paoloId).username("Paolo").build()
+        );
+
+        Optional<ApplicationUser> findApplicationUser = applicationUserReporitory.findById(paoloId);
+        assert(findApplicationUser.isPresent());
+        assertThat(findApplicationUser.get()).hasFieldOrPropertyWithValue("id", paoloId);
+        assertThat(findApplicationUser.get()).hasFieldOrPropertyWithValue("username", "Paolo");
+
+        applicationUserReporitory.save(
+                ApplicationUser.builder().id("paolo").username("Mario").build()
+        );
+
+        findApplicationUser = applicationUserReporitory.findById(paoloId);
+        assert(findApplicationUser.isPresent());
+        assertThat(findApplicationUser.get()).hasFieldOrPropertyWithValue("id", paoloId);
+        assertThat(findApplicationUser.get()).hasFieldOrPropertyWithValue("username", "Mario");
+
+        findApplicationUser = applicationUserReporitory.findByUsername("Mario");
+        assert(findApplicationUser.isPresent());
+        assertThat(findApplicationUser.get()).hasFieldOrPropertyWithValue("id", paoloId);
+        assertThat(findApplicationUser.get()).hasFieldOrPropertyWithValue("username", "Mario");
     }
 
     @Test
     public void compare_user() {
         ApplicationUser paolo = applicationUserReporitory.save(
-                ApplicationUser.builder().name("Paolo").build()
+                ApplicationUser.builder().id("paolo").username("Paolo").build()
         );
 
         ApplicationUser mario = applicationUserReporitory.save(
-                ApplicationUser.builder().name("Mario").build()
+                ApplicationUser.builder().id("mario").username("Mario").build()
         );
 
         assert(!paolo.equals(mario));

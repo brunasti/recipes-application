@@ -52,7 +52,7 @@ class UsersCRUDController {
 
 	// tag::get-single-item[]
 	@GetMapping("/crud/application_users/{id}")
-	EntityModel<ApplicationUser> one(@PathVariable Long id) {
+	EntityModel<ApplicationUser> one(@PathVariable String id) {
 
 		ApplicationUser applicationUser = repository.findById(id) //
 				.orElseThrow(() -> new ApplicationUserNotFoundException(id));
@@ -62,11 +62,11 @@ class UsersCRUDController {
 	// end::get-single-item[]
 
 	@PutMapping("/crud/application_users/{id}")
-	ApplicationUser replaceApplicationUser(@RequestBody ApplicationUser newApplicationUser, @PathVariable Long id) {
+	ApplicationUser replaceApplicationUser(@RequestBody ApplicationUser newApplicationUser, @PathVariable String id) {
 
 		return repository.findById(id) //
 				.map(applicationUser -> {
-					applicationUser.setName(newApplicationUser.getName());
+					applicationUser.setUsername(newApplicationUser.getUsername());
 					return repository.save(applicationUser);
 				}) //
 				.orElseGet(() -> {
@@ -76,7 +76,7 @@ class UsersCRUDController {
 	}
 
 	@DeleteMapping("/crud/application_users/{id}")
-	void deleteApplicationUser(@PathVariable Long id) {
+	void deleteApplicationUser(@PathVariable String id) {
 		repository.deleteById(id);
 	}
 }

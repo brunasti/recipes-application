@@ -20,8 +20,10 @@ import javax.persistence.Id;
 @Entity
 public class ApplicationUser {
 
-    private @Id @GeneratedValue Long id;
-    private String name;
+//    private @Id @GeneratedValue Long id;
+    private @Id String id;
+    private String username;
+    private String password;
 
     protected ApplicationUser() {}
 
