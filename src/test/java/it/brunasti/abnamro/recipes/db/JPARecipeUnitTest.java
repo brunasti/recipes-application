@@ -57,12 +57,10 @@ public class JPARecipeUnitTest {
                 Recipe.builder().name(spaghettiBurroName).instructions("Bollire l'acqua").build()
         );
 
-        List<Recipe> finds = recipeRepository.findByName(spaghettiBurroName);
-        assert(finds != null);
-        assert(finds.size() == 1);
-        assert(finds.get(0) != null);
+        Optional<Recipe> find = recipeRepository.findByName(spaghettiBurroName);
+        assert(find.isPresent());
 
-        Recipe recipe = finds.get(0);
+        Recipe recipe = find.get();
         assertThat(recipe).hasFieldOrPropertyWithValue("name", spaghettiBurroName);
         assertThat(recipe).hasFieldOrPropertyWithValue("instructions", "Bollire l'acqua");
     }

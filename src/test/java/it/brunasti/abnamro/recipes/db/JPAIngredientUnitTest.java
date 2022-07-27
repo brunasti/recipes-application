@@ -61,12 +61,10 @@ public class JPAIngredientUnitTest {
                 Ingredient.builder().name(acquaName).vegetarian(true).description("H2O").unit("g").build()
         );
 
-        List<Ingredient> finds = ingredientRepository.findByName(acquaName);
-        assert(finds != null);
-        assert(finds.size() == 1);
-        assert(finds.get(0) != null);
+        Optional<Ingredient> find = ingredientRepository.findByName(acquaName);
+        assert(find.isPresent());
 
-        Ingredient ingredient = finds.get(0);
+        Ingredient ingredient = find.get();
         assertThat(ingredient).hasFieldOrPropertyWithValue("name", acquaName);
         assertThat(ingredient).hasFieldOrPropertyWithValue("description", "H2O");
         assertThat(ingredient).hasFieldOrPropertyWithValue("unit", "g");

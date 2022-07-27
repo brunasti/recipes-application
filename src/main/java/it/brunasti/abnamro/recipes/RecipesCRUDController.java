@@ -33,7 +33,6 @@ class RecipesCRUDController {
 	// Aggregate root
 
 	// tag::get-aggregate-root[]
-//	@RequestMapping(value = "", method= RequestMethod.GET)
 	@GetMapping("/crud/recipes")
 	CollectionModel<EntityModel<Recipe>> all() {
 		List<EntityModel<Recipe>> recipes = repository.findAll().stream()

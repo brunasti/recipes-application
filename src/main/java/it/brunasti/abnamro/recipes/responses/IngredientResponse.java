@@ -5,12 +5,14 @@ import it.brunasti.abnamro.recipes.db.RecipeIngredientRelation;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
 @Setter
 @Getter
 @Builder
+@ToString
 public class IngredientResponse {
     private long id;
     private String name;
