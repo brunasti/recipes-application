@@ -39,8 +39,8 @@ class Recipe_Ingredient_Rel {
     quantity : decimal
 }
 
-Recipe::id <-r- Recipe_Ingredient_Rel::recipe_id
-Ingredient::id <-l- Recipe_Ingredient_Rel::product_id
+Recipe::id <-u- Recipe_Ingredient_Rel::recipe_id
+Ingredient::id <-u- Recipe_Ingredient_Rel::product_id
 
 
 @enduml

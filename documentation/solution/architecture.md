@@ -16,6 +16,8 @@ The Recipes application has four layers:
 
 The Client makes an HTTP request(GET, PUT, POST, etc.)
 
+The Spring Boot framework check for the authenticity of the user request, validating the permissions and in case asking for a login.
+
 The HTTP request is forwarded to the Controller. 
 The controller maps the request. 
 It processes the handles and calls the server logic.
@@ -23,8 +25,18 @@ It processes the handles and calls the server logic.
 The business logic is performed in the Service layer. 
 The spring boot performs all the logic over the data of the database which is mapped to the spring boot model class through Java Persistence Library(JPA) and stored in the in memory H2 database.
 
-The JSP page content is returned as Response from the controller.
+The JSON content is returned as Response from the controller.
+
+We follow the RESTful paradigm with the HATEOAS convention for providing action links within the JSON resource response.
 
 
+## Security
+
+
+## Data Model
+
+![ER Daa Model](../images/data-model.png)
+
+The data model could have been designed in a simpler way, for example inserting the ingredients as a comma separated list within a CLOB attribute in the Recipe entity, but this would have been a very rude and not flexible solution.
 
 
