@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("")
-class RecipesController {
+class RecipesCRUDController {
 
 	private final RecipeRepository repository;
 
-	RecipesController(RecipeRepository repository) {
+	RecipesCRUDController(RecipeRepository repository) {
 		this.repository = repository;
 	}
 
@@ -34,7 +34,7 @@ class RecipesController {
 
 	// tag::get-aggregate-root[]
 //	@RequestMapping(value = "", method= RequestMethod.GET)
-	@GetMapping("/recipes")
+	@GetMapping("/crud/recipes")
 	CollectionModel<EntityModel<Recipe>> all() {
 		List<EntityModel<Recipe>> recipes = repository.findAll().stream()
 				.map(EntityModel::of)
@@ -43,7 +43,7 @@ class RecipesController {
 	}
 	// end::get-aggregate-root[]
 
-	@PostMapping("/recipes")
+	@PostMapping("/crud/recipes")
 	Recipe newRecipe(@RequestBody Recipe newRecipe) {
 		return repository.save(newRecipe);
 	}
@@ -51,7 +51,7 @@ class RecipesController {
 	// Single item
 
 	// tag::get-single-item[]
-	@GetMapping("/recipes/{id}")
+	@GetMapping("/crud/recipes/{id}")
 	EntityModel<Recipe> one(@PathVariable Long id) {
 
 		Recipe recipe = repository.findById(id) //
@@ -61,7 +61,7 @@ class RecipesController {
 	}
 	// end::get-single-item[]
 
-	@PutMapping("/recipes/{id}")
+	@PutMapping("/crud/recipes/{id}")
 	Recipe replaceRecipe(@RequestBody Recipe newRecipe, @PathVariable Long id) {
 
 		return repository.findById(id) //
@@ -75,7 +75,7 @@ class RecipesController {
 				});
 	}
 
-	@DeleteMapping("/recipes/{id}")
+	@DeleteMapping("/crud/recipes/{id}")
 	void deleteRecipe(@PathVariable Long id) {
 		repository.deleteById(id);
 	}

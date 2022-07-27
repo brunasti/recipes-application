@@ -27,7 +27,7 @@ The spring boot performs all the logic over the data of the database which is ma
 
 The JSON content is returned as Response from the controller.
 
-We follow the RESTful paradigm with the HATEOAS convention for providing action links within the JSON resource response.
+![Spring architecture flow](../images/architecture-flow.png)
 
 
 ## Security
@@ -35,8 +35,8 @@ We follow the RESTful paradigm with the HATEOAS convention for providing action 
 
 ## Data Model
 
-![ER Daa Model](../images/data-model.png)
+![ER Dao Model](../images/data-model.png)
 
 The data model could have been designed in a simpler way, for example inserting the ingredients as a comma separated list within a CLOB attribute in the Recipe entity, but this would have been a very rude and not flexible solution.
-
+The instructions of a recipe are stored as a text (in this implementation a VarChar).
 
