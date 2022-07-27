@@ -41,8 +41,8 @@ class RecipesController {
 	// end::get-aggregate-root[]
 
 	@PostMapping("/recipes")
-	Recipe newEmployee(@RequestBody Recipe newEmployee) {
-		return repository.save(newEmployee);
+	Recipe newRecipe(@RequestBody Recipe newRecipe) {
+		return repository.save(newRecipe);
 	}
 
 	// Single item
@@ -59,7 +59,7 @@ class RecipesController {
 	// end::get-single-item[]
 
 	@PutMapping("/recipes/{id}")
-	Recipe replaceEmployee(@RequestBody Recipe newRecipe, @PathVariable Long id) {
+	Recipe replaceRecipe(@RequestBody Recipe newRecipe, @PathVariable Long id) {
 
 		return repository.findById(id) //
 				.map(recipe -> {
@@ -73,7 +73,7 @@ class RecipesController {
 	}
 
 	@DeleteMapping("/recipes/{id}")
-	void deleteEmployee(@PathVariable Long id) {
+	void deleteRecipe(@PathVariable Long id) {
 		repository.deleteById(id);
 	}
 }
