@@ -1,4 +1,4 @@
-package it.brunasti.abnamro.recipes;
+package it.brunasti.abnamro.recipes.jwt;
 
 //import lombok.experimental.FieldDefaults;
 
@@ -20,7 +20,7 @@ import static org.apache.commons.lang3.StringUtils.removeStart;
 
 //@FieldDefaults(level = PRIVATE, makeFinal = true)
 final public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-  TokenAuthenticationFilter(final RequestMatcher requiresAuth) { super(requiresAuth); }
+  public TokenAuthenticationFilter(final RequestMatcher requiresAuth) { super(requiresAuth); }
 
   /**
    * Called when a secured resource is requested.

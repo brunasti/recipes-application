@@ -1,6 +1,8 @@
 package it.brunasti.abnamro.recipes;
 
 import it.brunasti.abnamro.recipes.jwt.NoRedirectStrategy;
+import it.brunasti.abnamro.recipes.jwt.TokenAuthenticationFilter;
+import it.brunasti.abnamro.recipes.jwt.TokenAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           new AntPathRequestMatcher("/"),
           new AntPathRequestMatcher("/public/**"),
           new AntPathRequestMatcher("/swagger-ui/**"),
+          new AntPathRequestMatcher("/crud/**"),
           new AntPathRequestMatcher("/v3/**")
   );
 

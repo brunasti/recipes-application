@@ -1,5 +1,6 @@
 package it.brunasti.abnamro.recipes.jwt;
 
+import it.brunasti.abnamro.recipes.db.ApplicationUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ final class UserController {
   String register(
     @RequestParam("username") final String username,
     @RequestParam("password") final String password) {
-    users.save(User.builder().id(username).username(username).password(password).build());
+    users.save(ApplicationUser.builder().id(username).username(username).password(password).build());
 
       return authentication.login(username, password)
         .orElseThrow(() -> new RuntimeException("invalid login and/or password"));

@@ -1,10 +1,7 @@
 package it.brunasti.abnamro.recipes.jwt;
 
 import com.google.common.collect.ImmutableMap;
-import it.brunasti.abnamro.recipes.jwt.TokenService;
-import it.brunasti.abnamro.recipes.jwt.User;
-import it.brunasti.abnamro.recipes.jwt.UserAuthenticationService;
-import it.brunasti.abnamro.recipes.jwt.UserService;
+import it.brunasti.abnamro.recipes.db.ApplicationUser;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +31,7 @@ final class TokenAuthenticationService implements UserAuthenticationService {
   }
 
   @Override
-  public Optional<User> findByToken(final String token) {
+  public Optional<ApplicationUser> findByToken(final String token) {
     System.out.println("$$$$$$$$$$$$$$$$$$$$ token: " + token);
     return Optional
       .of(tokenService.verify(token))
@@ -43,6 +40,6 @@ final class TokenAuthenticationService implements UserAuthenticationService {
   }
 
   @Override
-  public void logout(final User user) {
+  public void logout(final ApplicationUser user) {
   }
 }

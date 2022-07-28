@@ -1,5 +1,6 @@
 package it.brunasti.abnamro.recipes.jwt;
 
+import it.brunasti.abnamro.recipes.db.ApplicationUser;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -12,23 +13,27 @@ import static java.util.Optional.ofNullable;
 @Service
 final class UserServiceImpl implements UserService {
 
-  Map<String, User> users = new HashMap<>()
+  // TODO - PB
+  // rewrite to match the DAO classes and tables
+
+  Map<String, ApplicationUser > users = new HashMap<>()
   {{
-       put("Matt", new User("0","matt","idg"));
+    put("Paolo", new ApplicationUser ("paolo","paolo","brunasti"));
+    put("Mario", new ApplicationUser ("mario","mario","luigi"));
   }};
 
   @Override
-  public User save(final User user) {
+  public ApplicationUser save(final ApplicationUser user) {
     return users.put(user.getId(), user);
   }
 
   @Override
-  public Optional<User> find(final String id) {
+  public Optional<ApplicationUser > find(final String id) {
     return ofNullable(users.get(id));
   }
 
   @Override
-  public Optional<User> findByUsername(final String username) {
+  public Optional<ApplicationUser > findByUsername(final String username) {
     return users
       .values()
       .stream()

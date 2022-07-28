@@ -1,12 +1,14 @@
 package it.brunasti.abnamro.recipes.jwt;
 
+import it.brunasti.abnamro.recipes.db.ApplicationUser;
+
 import java.util.Optional;
 
 public interface UserService {
 
-  User save(User user);
+  ApplicationUser  save(ApplicationUser  user);
 
-  Optional<User> find(String id);
+  Optional<ApplicationUser > find(String id);
 
-  Optional<User> findByUsername(String username);
+  Optional<ApplicationUser > findByUsername(String username);
 }
