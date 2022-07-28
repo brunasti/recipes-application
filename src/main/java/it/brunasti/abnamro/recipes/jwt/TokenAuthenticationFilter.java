@@ -1,7 +1,8 @@
 package it.brunasti.abnamro.recipes.jwt;
 
-//import lombok.experimental.FieldDefaults;
-
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,8 +19,10 @@ import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 
-//@FieldDefaults(level = PRIVATE, makeFinal = true)
+@Slf4j
 final public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+  private static final Logger logger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
+
   public TokenAuthenticationFilter(final RequestMatcher requiresAuth) { super(requiresAuth); }
 
   /**
@@ -28,13 +31,17 @@ final public class TokenAuthenticationFilter extends AbstractAuthenticationProce
   @Override
   public Authentication attemptAuthentication(final HttpServletRequest request,
                                               final HttpServletResponse response) {
+    logger.info("attemptAuthentication START");
+    logger.info("attemptAuthentication AUTHORIZATION : ["+AUTHORIZATION+"]");
     final String param = ofNullable(request.getHeader(AUTHORIZATION)).orElse(request.getParameter("t"));
 
     final String token = ofNullable(param).map(value -> removeStart(value, "Bearer"))
       .map(String::trim).orElseThrow(() -> new BadCredentialsException("No Token Found!"));
 
+    logger.info("attemptAuthentication token : ["+token+"]");
+
     final Authentication auth = new UsernamePasswordAuthenticationToken(token, token);
-    System.out.println("^^^^^^^^ auth: " + auth);
+    logger.info("attemptAuthentication auth : ["+auth+"]");
     return getAuthenticationManager().authenticate(auth);
   }
 

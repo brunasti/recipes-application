@@ -1,5 +1,6 @@
 package it.brunasti.abnamro.recipes.services;
 
+import it.brunasti.abnamro.recipes.db.ApplicationUser;
 import it.brunasti.abnamro.recipes.db.Ingredient;
 import it.brunasti.abnamro.recipes.db.IngredientRepository;
 import it.brunasti.abnamro.recipes.db.Recipe;
@@ -9,6 +10,7 @@ import it.brunasti.abnamro.recipes.db.RecipeRepository;
 import it.brunasti.abnamro.recipes.exceptions.RecipeAlreadyExistsException;
 import it.brunasti.abnamro.recipes.exceptions.RecipeMismatchException;
 import it.brunasti.abnamro.recipes.exceptions.RecipeNotFoundException;
+import it.brunasti.abnamro.recipes.jwt.TokenAuthenticationService;
 import it.brunasti.abnamro.recipes.requests.RecipeRequest;
 import it.brunasti.abnamro.recipes.responses.RecipeResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +20,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
+//import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.ws.rs.NotAuthorizedException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,14 +40,29 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final IngredientRepository ingredientRepository;
     private final RecipeIngredientRelationRepository recipeIngredientRelationRepository;
+	private final TokenAuthenticationService tokenAuthenticationService;
 
 
-    public EntityModel<RecipeResponse> retrieveRecipe(Long id) {
+    public EntityModel<RecipeResponse> retrieveRecipe(Long id, String token) {
         logger.info("retrieveRecipe "+id);
+        logger.info("retrieveRecipe token : ["+token+"]");
 
+        // Retrieve the recipe
         Recipe recipe = recipeRepository.findById(id) //
                 .orElseThrow(() -> new RecipeNotFoundException(id));
 
+        // Check if recipe owner corresponds to token user
+        Optional<ApplicationUser> applicationUser = tokenAuthenticationService.findByToken(token);
+        if (applicationUser.isEmpty()) {
+            logger.info("retrieveRecipe User Not found");
+            throw new RecipeNotFoundException(id);
+        }
+        if (!applicationUser.get().getId().equals(recipe.getOwnerId())) {
+            logger.info("retrieveRecipe User Not Match : ["+applicationUser.get().getUsername()+"] ["+recipe.getOwnerId()+"]");
+            throw new RecipeNotFoundException(id);
+        }
+
+        // Build all the recipe structure with sub relations
         Map<RecipeIngredientRelation, Ingredient> relation = new HashMap<>();
 
         List<RecipeIngredientRelation> recipeIngredientRelationList = recipeIngredientRelationRepository.findByRecipeId(id);
@@ -53,25 +71,29 @@ public class RecipeService {
             ingredient.ifPresent(value -> relation.put(recipeIngredientRelation, value));
         });
 
-        RecipeResponse recipeResponse = RecipeResponse.createFromRecipe(recipe, relation);
-
         logger.info("retrieveRecipe "+id+" - END");
 
-        return EntityModel.of(recipeResponse);
+        return EntityModel.of(RecipeResponse.createFromRecipe(recipe, relation));
     }
 
 
-    public EntityModel<RecipeResponse> createRecipe(RecipeRequest newRecipe) {
-        logger.info("createRecipe : " + newRecipe.getName() + " - " + newRecipe.getOwnerId() );
+    public EntityModel<RecipeResponse> createRecipe(RecipeRequest newRecipe, String token) {
+        Optional<ApplicationUser> applicationUser = tokenAuthenticationService.findByToken(token);
+        if (applicationUser.isEmpty()) {
+            logger.info("createRecipe User Not found");
+            throw new NotAuthorizedException("createRecipe User Not found");
+        }
+
+        logger.info("createRecipe : " + newRecipe.getName() + " - " + applicationUser.get().getId() );
         logger.info("createRecipe : [" + newRecipe + "]" );
-        Optional<Recipe> recipeOptional = recipeRepository.findByNameAndOwnerId(newRecipe.getName(), newRecipe.getOwnerId());
+        Optional<Recipe> recipeOptional = recipeRepository.findByNameAndOwnerId(newRecipe.getName(), applicationUser.get().getId());
         if (recipeOptional.isPresent()) {
             logger.info("createRecipe - already FOUND ");
-            throw new RecipeAlreadyExistsException(newRecipe.getName(), newRecipe.getOwnerId());
+            throw new RecipeAlreadyExistsException(newRecipe.getName(), applicationUser.get().getId());
         }
 
         logger.info("createRecipe - Create Recipe");
-        Recipe recipe = newRecipe.toRecipe();
+        Recipe recipe = newRecipe.toRecipe(applicationUser.get().getId());
         recipeRepository.save(recipe);
 
         Map<RecipeIngredientRelation, Ingredient> relation = new HashMap<>();
@@ -97,29 +119,35 @@ public class RecipeService {
             relation.put(recipeIngredientRelation, ingredient);
         });
 
-        RecipeResponse recipeResponse = RecipeResponse.createFromRecipe(recipe, relation);
+//        RecipeResponse recipeResponse = RecipeResponse.createFromRecipe(recipe, relation);
 
         logger.info("createRecipe - END");
-        return EntityModel.of(recipeResponse);
+        return EntityModel.of(RecipeResponse.createFromRecipe(recipe, relation));
     }
 
     @Transactional
-    public EntityModel<RecipeResponse> updateRecipe(Long id, RecipeRequest recipeRequest) {
-        logger.info("updateRecipe : [" + id + "] - " + recipeRequest.getName() + " - " + recipeRequest.getOwnerId() );
+    public EntityModel<RecipeResponse> updateRecipe(Long id, RecipeRequest recipeRequest, String token) {
+        Optional<ApplicationUser> applicationUser = tokenAuthenticationService.findByToken(token);
+        if (applicationUser.isEmpty()) {
+            logger.info("createRecipe User Not found");
+            throw new NotAuthorizedException("createRecipe User Not found");
+        }
+
+        logger.info("updateRecipe : [" + id + "] - " + recipeRequest.getName() + " - " + applicationUser.get().getId() );
         logger.info("updateRecipe : [" + recipeRequest + "]" );
-        Optional<Recipe> recipeOptional = recipeRepository.findByNameAndOwnerId(recipeRequest.getName(), recipeRequest.getOwnerId());
+        Optional<Recipe> recipeOptional = recipeRepository.findByNameAndOwnerId(recipeRequest.getName(), applicationUser.get().getId());
         if (recipeOptional.isEmpty()) {
             logger.info("updateRecipe - Not FOUND ");
-            throw new RecipeNotFoundException(recipeRequest.getName(), recipeRequest.getOwnerId());
+            throw new RecipeNotFoundException(recipeRequest.getName(), applicationUser.get().getId());
         }
 
         if (!recipeOptional.get().getId().equals(id)) {
             logger.info("updateRecipe - id Mismatch id ["+recipeOptional.get().getId()+"] instead of ["+id+"]");
-            throw new RecipeMismatchException(recipeRequest.getName(), recipeRequest.getOwnerId(), recipeOptional.get().getId(), id);
+            throw new RecipeMismatchException(recipeRequest.getName(), applicationUser.get().getId(), recipeOptional.get().getId(), id);
         }
 
         logger.info("updateRecipe - Save Recipe");
-        Recipe recipe = recipeRequest.toRecipe();
+        Recipe recipe = recipeRequest.toRecipe(applicationUser.get().getId());
         recipe.setId(id);
         recipeRepository.save(recipe);
 
@@ -145,16 +173,19 @@ public class RecipeService {
             relation.put(recipeIngredientRelation, ingredient);
         });
 
-        logger.info("updateRecipe - create response");
-        RecipeResponse recipeResponse = RecipeResponse.createFromRecipe(recipe, relation);
+//        logger.info("updateRecipe - create response");
+//        RecipeResponse recipeResponse = RecipeResponse.createFromRecipe(recipe, relation);
 
         logger.info("updateRecipe - END");
-        return EntityModel.of(recipeResponse);
+        return EntityModel.of(RecipeResponse.createFromRecipe(recipe, relation));
     }
 
-    public EntityModel<RecipeResponse>  deleteRecipe(@PathVariable Long id) {
-        EntityModel<RecipeResponse> recipeResponseEntityModel = retrieveRecipe(id);
+    public EntityModel<RecipeResponse>  deleteRecipe(Long id, String token) {
+        logger.info("deleteRecipe "+id);
+        logger.info("deleteRecipe token : ["+token+"]");
+        EntityModel<RecipeResponse> recipeResponseEntityModel = retrieveRecipe(id, token);
         recipeRepository.deleteById(id);
+        logger.info("deleteRecipe - END");
         return recipeResponseEntityModel;
     }
 

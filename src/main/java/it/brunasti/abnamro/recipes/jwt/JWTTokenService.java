@@ -19,7 +19,6 @@ import static io.jsonwebtoken.impl.TextCodec.BASE64;
 import static java.util.Objects.requireNonNull;
 
 @Service
-//@FieldDefaults(level = PRIVATE, makeFinal = true)
 final class JWTTokenService implements Clock, TokenService {
   private static final GzipCompressionCodec COMPRESSION_CODEC = new GzipCompressionCodec();
 
@@ -29,7 +28,6 @@ final class JWTTokenService implements Clock, TokenService {
   JWTTokenService() {
     super();
     this.issuer = requireNonNull("brunasti");
-    System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!! issuer " + issuer);
     this.secretKey = BASE64.encode("www.brunasti.it");
   }
 

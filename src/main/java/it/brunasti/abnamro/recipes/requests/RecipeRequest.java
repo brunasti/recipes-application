@@ -13,14 +13,14 @@ import java.util.List;
 @Builder
 @ToString
 public class RecipeRequest {
-    private String ownerId;
+//    private String ownerId;
     private String name;
     private String instructions;
     private int servings;
 
     private List<IngredientRequest> ingredients;
 
-    public Recipe toRecipe() {
+    public Recipe toRecipe(String ownerId) {
         return Recipe.builder().instructions(instructions).servings(servings).name(name).ownerId(ownerId).build();
     }
 }

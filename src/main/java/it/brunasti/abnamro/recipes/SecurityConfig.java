@@ -26,8 +26,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled=true)
-//@FieldDefaults(level = PRIVATE, makeFinal = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
   private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
           new AntPathRequestMatcher("/"),
           new AntPathRequestMatcher("/public/**"),
@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     super();
     this.provider = requireNonNull(provider);
   }
+
   protected void configure(final HttpSecurity http) throws Exception {
     http
       .sessionManagement() 
@@ -67,16 +68,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .httpBasic().disable()
       .logout().disable();
   }
+
   @Bean
   AuthenticationEntryPoint forbiddenEntryPoint() {
     return new HttpStatusEntryPoint(HttpStatus.FORBIDDEN);
   }
+
   @Bean
   SimpleUrlAuthenticationSuccessHandler successHandler() {
     final SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
     successHandler.setRedirectStrategy(new NoRedirectStrategy());
     return successHandler;
   }
+
   @Bean
   TokenAuthenticationFilter restAuthenticationFilter() throws Exception {
     final TokenAuthenticationFilter filter = new TokenAuthenticationFilter(PROTECTED_URLS);
@@ -84,27 +88,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     filter.setAuthenticationSuccessHandler(successHandler());
     return filter; 
   }
-  /*@Override
-  protected void configure(final HttpSecurity http) throws Exception {
-    http
-      .sessionManagement()
-      .sessionCreationPolicy(STATELESS)
-      .and()
-      .exceptionHandling()
-      // this entry point handles when you request a protected page and you are not yet
-      // authenticated
-      .defaultAuthenticationEntryPointFor(forbiddenEntryPoint(), PROTECTED_URLS)
-      .and()
-      .authenticationProvider(provider)
-      .addFilterBefore(restAuthenticationFilter(), AnonymousAuthenticationFilter.class)
-      .authorizeRequests()
-      .requestMatchers(PROTECTED_URLS)
-      .authenticated()
-      .and()
-      .csrf().disable()
-      .formLogin().disable()
-      .httpBasic().disable()
-      .logout().disable();
-  }
-  */
 }

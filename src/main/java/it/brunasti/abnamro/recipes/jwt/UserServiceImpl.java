@@ -11,16 +11,9 @@ import java.util.Optional;
 import static java.util.Optional.ofNullable;
 
 @Service
-final class UserServiceImpl implements UserService {
+public final class UserServiceImpl implements UserService {
 
-  // TODO - PB
-  // rewrite to match the DAO classes and tables
-
-  Map<String, ApplicationUser > users = new HashMap<>()
-  {{
-    put("Paolo", new ApplicationUser ("paolo","paolo","brunasti"));
-    put("Mario", new ApplicationUser ("mario","mario","luigi"));
-  }};
+  Map<String, ApplicationUser > users = new HashMap<>();
 
   @Override
   public ApplicationUser save(final ApplicationUser user) {

@@ -7,11 +7,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RecipesApplication {
 
 	// TODO :
+	// DONE - execute protected APIs with token
+	// - rewrite UserServiceImpl to use the DAO classes and tables
+	// - check user access to recipes not owned by him/her
 	// - add API input validations as RequestParam
 	// - document API calls and parameters
-	// - rewrite UserServiceImpl to match and use the DAO classes and tables
 	// - add more unit tests for coverage
 	// - add integration tests
+	// - document how to use the token in Postman
 
 	public static void main(String[] args) {
 

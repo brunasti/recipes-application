@@ -1,7 +1,9 @@
 package it.brunasti.abnamro.recipes.db;
 
+import it.brunasti.abnamro.recipes.jwt.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,13 +15,17 @@ class LoadDatabase {
 
 	private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
+	@Autowired
+	UserService users;
+
 	@Bean
 	CommandLineRunner initDatabase(ApplicationUserReporitory applicationUserReporitory, RecipeRepository recipeRepository, IngredientRepository ingredientRepository, RecipeIngredientRelationRepository recipeIngredientRelationRepository) {
 
 		return args -> {
 			String userId = "paolo";
-			ApplicationUser user = ApplicationUser.builder().id(userId).username("Paolo").password("Brunasti").build();
+			ApplicationUser user = ApplicationUser.builder().id(userId).username("paolo").password("brunasti").build();
 			log.info("Preloading " + applicationUserReporitory.save(user));
+			users.save(user);
 
 			Recipe spaghettiAlBurro = Recipe.builder().ownerId(user.getId()).name("spaghetti al burro").instructions("Boil water").servings(2).build();
 			log.info("Preloading " + recipeRepository.save(spaghettiAlBurro));
@@ -43,6 +49,10 @@ class LoadDatabase {
 			log.info("Preloading " + recipeIngredientRelationRepository.save(
 					RecipeIngredientRelation.builder().recipeId(spaghettiAlBurro.getId()).ingredientId(sale.getId()).quantity(BigDecimal.valueOf(10)).build()));
 
+			// add one more user to check access to recipes from another user
+			user = ApplicationUser.builder().id("mario").username("mario").password("bross").build();
+			log.info("Preloading " + applicationUserReporitory.save(user));
+			users.save(user);
 		};
 	}
 }
