@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,8 +49,15 @@ class ApplicationController {
 	}
 
 	@GetMapping("/recipes")
-	EntityModel<RecipesListResponse> retieveRecipes(HttpServletRequest request) {
-		return recipeService.retrieveRecipes(extractToken(request));
+	EntityModel<RecipesListResponse> retrieveRecipes(
+			HttpServletRequest request,
+			@RequestParam(required = false) Boolean vegetarian,
+			@RequestParam(required = false) Integer servings
+	) {
+		logger.info("retrieveRecipes");
+		logger.info("retrieveRecipes vegetarian : ["+vegetarian+"]");
+		logger.info("retrieveRecipes servings : ["+servings+"]");
+		return recipeService.retrieveRecipes(extractToken(request), vegetarian, servings);
 	}
 
 	@DeleteMapping("/recipes/{id}")

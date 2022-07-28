@@ -18,16 +18,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-//import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.NotAuthorizedException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,23 +63,18 @@ public class RecipeService {
             throw new RecipeNotFoundException(id);
         }
 
-        // Build all the recipe structure with sub relations
-//        Map<RecipeIngredientRelation, Ingredient> relation = new HashMap<>();
-//
-//        List<RecipeIngredientRelation> recipeIngredientRelationList = recipeIngredientRelationRepository.findByRecipeId(id);
-//        recipeIngredientRelationList.forEach(recipeIngredientRelation -> {
-//            Optional<Ingredient> ingredient = ingredientRepository.findById(recipeIngredientRelation.getIngredientId());
-//            ingredient.ifPresent(value -> relation.put(recipeIngredientRelation, value));
-//        });
-//
-//        logger.info("retrieveRecipe "+id+" - END");
-//
+        // Build all the recipe structure with sub relations and return the model
         return EntityModel.of(buildRecipeResponse(recipe));
     }
 
-    public EntityModel<RecipesListResponse> retrieveRecipes(String token) {
+    public EntityModel<RecipesListResponse> retrieveRecipes(String token,
+        Boolean vegetarian, Integer servings
+    ) {
         logger.info("retrieveRecipes");
         logger.info("retrieveRecipes token : [" + token + "]");
+        logger.info("retrieveRecipes vegetarian : ["+vegetarian+"]");
+        logger.info("retrieveRecipes servings : ["+servings+"]");
+
         RecipesListResponse recipesListResponse = new RecipesListResponse();
 
         Optional<ApplicationUser> applicationUser = tokenAuthenticationService.findByToken(token);
@@ -90,11 +83,39 @@ public class RecipeService {
             throw new NotAuthorizedException("createRecipe User Not found");
         }
 
-        logger.info("retrieveRecipes : " + applicationUser.get().getId() );
-
+        logger.info("retrieveRecipes User : " + applicationUser.get().getId() );
         List<Recipe> recipes = recipeRepository.findByOwnerId(applicationUser.get().getId());
 
-        recipes.forEach(recipe -> recipesListResponse.getRecipes().add(buildRecipeResponse(recipe)));
+        recipes.forEach(recipe ->
+                {
+                    logger.info("retrieveRecipes recipe : " + recipe.getName() );
+                    RecipeResponse recipeResponse = buildRecipeResponse(recipe);
+
+                    boolean add = true;
+                    boolean addVeg = true;
+                    boolean addServ = true;
+
+                    if (vegetarian != null) {
+                        if (!vegetarian.equals(recipeResponse.getVegetarian())) {
+                            addVeg = false;
+                        }
+                    }
+
+                    if (servings != null) {
+                        if (!servings.equals(recipeResponse.getServings())) {
+                            addServ = false;
+                        }
+                    }
+
+                    if (!addVeg || !addServ) {
+                        add = false;
+                    }
+
+                    if (add) {
+                        recipesListResponse.getRecipes().add(recipeResponse);
+                    }
+                }
+        );
 
         return EntityModel.of(recipesListResponse);
     }
@@ -209,10 +230,12 @@ public class RecipeService {
 
     private RecipeResponse buildRecipeResponse(Recipe recipe) {
         // Build all the recipe structure with sub relations
+        logger.info("buildRecipeResponse recipe : " + recipe.getName() );
         Map<RecipeIngredientRelation, Ingredient> relation = new HashMap<>();
 
         List<RecipeIngredientRelation> recipeIngredientRelationList = recipeIngredientRelationRepository.findByRecipeId(recipe.getId());
         recipeIngredientRelationList.forEach(recipeIngredientRelation -> {
+            logger.info("buildRecipeResponse recipeIngredientRelation : " + recipeIngredientRelation );
             Optional<Ingredient> ingredient = ingredientRepository.findById(recipeIngredientRelation.getIngredientId());
             ingredient.ifPresent(value -> relation.put(recipeIngredientRelation, value));
         });
