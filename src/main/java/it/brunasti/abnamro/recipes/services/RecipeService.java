@@ -13,10 +13,12 @@ import it.brunasti.abnamro.recipes.exceptions.RecipeNotFoundException;
 import it.brunasti.abnamro.recipes.jwt.TokenAuthenticationService;
 import it.brunasti.abnamro.recipes.requests.RecipeRequest;
 import it.brunasti.abnamro.recipes.responses.RecipeResponse;
+import it.brunasti.abnamro.recipes.responses.RecipesListResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.NotAuthorizedException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,19 +66,38 @@ public class RecipeService {
         }
 
         // Build all the recipe structure with sub relations
-        Map<RecipeIngredientRelation, Ingredient> relation = new HashMap<>();
-
-        List<RecipeIngredientRelation> recipeIngredientRelationList = recipeIngredientRelationRepository.findByRecipeId(id);
-        recipeIngredientRelationList.forEach(recipeIngredientRelation -> {
-            Optional<Ingredient> ingredient = ingredientRepository.findById(recipeIngredientRelation.getIngredientId());
-            ingredient.ifPresent(value -> relation.put(recipeIngredientRelation, value));
-        });
-
-        logger.info("retrieveRecipe "+id+" - END");
-
-        return EntityModel.of(RecipeResponse.createFromRecipe(recipe, relation));
+//        Map<RecipeIngredientRelation, Ingredient> relation = new HashMap<>();
+//
+//        List<RecipeIngredientRelation> recipeIngredientRelationList = recipeIngredientRelationRepository.findByRecipeId(id);
+//        recipeIngredientRelationList.forEach(recipeIngredientRelation -> {
+//            Optional<Ingredient> ingredient = ingredientRepository.findById(recipeIngredientRelation.getIngredientId());
+//            ingredient.ifPresent(value -> relation.put(recipeIngredientRelation, value));
+//        });
+//
+//        logger.info("retrieveRecipe "+id+" - END");
+//
+        return EntityModel.of(buildRecipeResponse(recipe));
     }
 
+    public EntityModel<RecipesListResponse> retrieveRecipes(String token) {
+        logger.info("retrieveRecipes");
+        logger.info("retrieveRecipes token : [" + token + "]");
+        RecipesListResponse recipesListResponse = new RecipesListResponse();
+
+        Optional<ApplicationUser> applicationUser = tokenAuthenticationService.findByToken(token);
+        if (applicationUser.isEmpty()) {
+            logger.info("createRecipe User Not found");
+            throw new NotAuthorizedException("createRecipe User Not found");
+        }
+
+        logger.info("retrieveRecipes : " + applicationUser.get().getId() );
+
+        List<Recipe> recipes = recipeRepository.findByOwnerId(applicationUser.get().getId());
+
+        recipes.forEach(recipe -> recipesListResponse.getRecipes().add(buildRecipeResponse(recipe)));
+
+        return EntityModel.of(recipesListResponse);
+    }
 
     public EntityModel<RecipeResponse> createRecipe(RecipeRequest newRecipe, String token) {
         Optional<ApplicationUser> applicationUser = tokenAuthenticationService.findByToken(token);
@@ -118,8 +140,6 @@ public class RecipeService {
 
             relation.put(recipeIngredientRelation, ingredient);
         });
-
-//        RecipeResponse recipeResponse = RecipeResponse.createFromRecipe(recipe, relation);
 
         logger.info("createRecipe - END");
         return EntityModel.of(RecipeResponse.createFromRecipe(recipe, relation));
@@ -173,9 +193,6 @@ public class RecipeService {
             relation.put(recipeIngredientRelation, ingredient);
         });
 
-//        logger.info("updateRecipe - create response");
-//        RecipeResponse recipeResponse = RecipeResponse.createFromRecipe(recipe, relation);
-
         logger.info("updateRecipe - END");
         return EntityModel.of(RecipeResponse.createFromRecipe(recipe, relation));
     }
@@ -187,6 +204,21 @@ public class RecipeService {
         recipeRepository.deleteById(id);
         logger.info("deleteRecipe - END");
         return recipeResponseEntityModel;
+    }
+
+
+    private RecipeResponse buildRecipeResponse(Recipe recipe) {
+        // Build all the recipe structure with sub relations
+        Map<RecipeIngredientRelation, Ingredient> relation = new HashMap<>();
+
+        List<RecipeIngredientRelation> recipeIngredientRelationList = recipeIngredientRelationRepository.findByRecipeId(recipe.getId());
+        recipeIngredientRelationList.forEach(recipeIngredientRelation -> {
+            Optional<Ingredient> ingredient = ingredientRepository.findById(recipeIngredientRelation.getIngredientId());
+            ingredient.ifPresent(value -> relation.put(recipeIngredientRelation, value));
+        });
+
+        return RecipeResponse.createFromRecipe(recipe, relation);
+
     }
 
 }
