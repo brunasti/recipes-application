@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @Builder
 @ToString
-public class NewIngredientRequest {
+public class IngredientRequest {
     private String name;
     private String description;
     private String unit;
