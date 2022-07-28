@@ -1,6 +1,10 @@
-package it.brunasti.abnamro.recipes;
+package it.brunasti.abnamro.recipes.jwt;
 
 import com.google.common.collect.ImmutableMap;
+import it.brunasti.abnamro.recipes.jwt.TokenService;
+import it.brunasti.abnamro.recipes.jwt.User;
+import it.brunasti.abnamro.recipes.jwt.UserAuthenticationService;
+import it.brunasti.abnamro.recipes.jwt.UserService;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package it.brunasti.abnamro.recipes;
 
+import it.brunasti.abnamro.recipes.jwt.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-final class TokenAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+public final class TokenAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
   @Autowired
-  UserAuthenticationService auth; 
+  UserAuthenticationService auth;
 
   @Override
   protected void additionalAuthenticationChecks(final UserDetails d, final UsernamePasswordAuthenticationToken auth) {
@@ -22,6 +23,6 @@ final class TokenAuthenticationProvider extends AbstractUserDetailsAuthenticatio
   protected UserDetails retrieveUser(final String username, final UsernamePasswordAuthenticationToken authentication) {
     final Object token = authentication.getCredentials();
     return Optional.ofNullable(token).map(String::valueOf).flatMap(auth::findByToken)
-      .orElseThrow(() -> new UsernameNotFoundException("Couldn't find user: " + token));
+            .orElseThrow(() -> new UsernameNotFoundException("Couldn't find user: " + token));
   }
 }

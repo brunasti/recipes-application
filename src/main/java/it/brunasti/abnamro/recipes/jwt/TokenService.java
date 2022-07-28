@@ -1,4 +1,4 @@
-package it.brunasti.abnamro.recipes;
+package it.brunasti.abnamro.recipes.jwt;
 
 import java.util.Map;
 

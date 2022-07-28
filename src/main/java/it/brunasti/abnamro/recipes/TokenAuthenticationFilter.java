@@ -19,7 +19,7 @@ import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 
 //@FieldDefaults(level = PRIVATE, makeFinal = true)
-final class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+final public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
   TokenAuthenticationFilter(final RequestMatcher requiresAuth) { super(requiresAuth); }
 
   /**

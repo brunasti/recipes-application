@@ -1,4 +1,6 @@
-package it.brunasti.abnamro.recipes;
+package it.brunasti.abnamro.recipes.jwt;
+
+import it.brunasti.abnamro.recipes.jwt.User;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package it.brunasti.abnamro.recipes;
+package it.brunasti.abnamro.recipes.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;

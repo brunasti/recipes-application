@@ -1,4 +1,4 @@
-package it.brunasti.abnamro.recipes;
+package it.brunasti.abnamro.recipes.jwt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

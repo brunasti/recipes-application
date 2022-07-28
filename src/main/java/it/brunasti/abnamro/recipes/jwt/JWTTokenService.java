@@ -1,4 +1,4 @@
-package it.brunasti.abnamro.recipes;
+package it.brunasti.abnamro.recipes.jwt;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
@@ -28,9 +28,9 @@ final class JWTTokenService implements Clock, TokenService {
 
   JWTTokenService() {
     super();
-    this.issuer = requireNonNull("infoworld");
+    this.issuer = requireNonNull("brunasti");
     System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!! issuer " + issuer);
-    this.secretKey = BASE64.encode("www.infoworld.com");
+    this.secretKey = BASE64.encode("www.brunasti.it");
   }
 
   public String newToken(final Map<String, String> attributes) {
