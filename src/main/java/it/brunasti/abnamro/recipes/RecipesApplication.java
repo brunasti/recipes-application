@@ -18,7 +18,7 @@ public class RecipesApplication {
 	// - add API input validations as RequestParam
 	// - add more unit tests for coverage
 	// - add integration tests
-	// - document how to start
+	// DONE - document how to start
 	// - document how to use the token in Postman
 	// - document API calls and parameters
 	// - define the error responses

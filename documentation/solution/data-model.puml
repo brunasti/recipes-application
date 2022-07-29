@@ -4,22 +4,32 @@
 
 hide method
 
-class User
+class User as "ApplicationUser" << (S,#3388FF) >>
 {
-    * id : long
-    name : varchar
+    * id : varchar
+    username : varchar
+    password : varchar
 }
 
-class Recipe
+note top of User
+ This ApplicationUser entity
+ is intended as a place holder
+ for the company LDAP ore IAM
+ system, which for semplicity
+ I have here implemented via
+ JWT and a DAO object
+end note
+
+class Recipe << (E,#008800) >>
 {
     * id : long
     + owner_id : long
     + name : varchar
-    + instructions : varchar
+    instructions : varchar
     servings : int
 }
 
-class Ingredient
+class Ingredient << (E,#008800) >>
 {
     * id : long
     + name : varchar
@@ -32,15 +42,27 @@ class Ingredient
 Recipe::owner_user_id -u-> User::id
 
 
-class Recipe_Ingredient_Rel {
+class RecipeIngredientRelation  << (R,#00CC00) >>
+ {
     * id : long
     + recipe_id : long
     + ingredient_id : long
     quantity : decimal
 }
 
-Recipe::id <-u- Recipe_Ingredient_Rel::recipe_id
-Ingredient::id <-u- Recipe_Ingredient_Rel::product_id
+note top of RecipeIngredientRelation
+ This RecipeIngredientRelation entity
+ connect the Recipe with the Ingredient,
+ so to create the N-M relation between
+ the two entities, and enabling
+ the storage of even one more
+ relation-dependent info which is
+ the quantity
+end note
+
+
+Recipe::id <-u- RecipeIngredientRelation::recipe_id
+Ingredient::id <-u- RecipeIngredientRelation::product_id
 
 
 @enduml

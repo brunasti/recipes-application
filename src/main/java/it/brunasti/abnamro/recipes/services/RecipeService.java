@@ -91,6 +91,11 @@ public class RecipeService {
             throw new NotAuthorizedException("createRecipe User Not found");
         }
 
+        // This implementation of the Query by example is very rude, but working.
+        // With a different DB structure it could be easily been delegated to the DAO layer,
+        // or a more complex query schema could be used always via the DAO components,
+        // but for project simplicity and time constrains I preferred to go brute force
+        // with code, which could be even not performance effective.
         logger.info("retrieveRecipes User : " + applicationUser.get().getId() );
         List<Recipe> recipes = recipeRepository.findByOwnerId(applicationUser.get().getId());
 
