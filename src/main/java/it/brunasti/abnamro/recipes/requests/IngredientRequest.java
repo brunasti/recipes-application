@@ -19,7 +19,7 @@ public class IngredientRequest {
     private Boolean vegetarian;
     private BigDecimal quantity;
 
-    public Ingredient toIngredent() {
+    public Ingredient toIngredient() {
         return Ingredient.builder().name(name).unit(unit).description(description).vegetarian(vegetarian).build();
     }
 }

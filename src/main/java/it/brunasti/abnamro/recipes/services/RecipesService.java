@@ -196,7 +196,7 @@ public class RecipesService {
             if (ingredientOptional.isPresent()) {
                 ingredient = ingredientOptional.get();
             } else {
-                ingredient = newIngredientRequest.toIngredent();
+                ingredient = newIngredientRequest.toIngredient();
                 ingredientRepository.save(ingredient);
             }
 
@@ -249,7 +249,7 @@ public class RecipesService {
 
         recipeRequest.getIngredients().forEach(newIngredientRequest -> {
             Optional<Ingredient> ingredientOptional = ingredientRepository.findByName(newIngredientRequest.getName());
-            Ingredient ingredient = ingredientOptional.orElseGet(newIngredientRequest::toIngredent);
+            Ingredient ingredient = ingredientOptional.orElseGet(newIngredientRequest::toIngredient);
             ingredientRepository.save(ingredient);
 
             RecipeIngredientRelation recipeIngredientRelation =
