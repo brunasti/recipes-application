@@ -1,13 +1,21 @@
 <h1>
-  InfoWorld Java, Spring, JWT
+  RecipesApplication
 </h1>
-<button onclick="protectedAPI()">Get Access Token</button>
-<div id="protectedMessage"></div>
+
 <hr>
 <input type="text" placeholder="username" id="username" />
 <input type="text" placeholder="password" id="password" />
 <div id="login-msg"></div>
 <button onclick="login()">Login</button>
+<hr>
+<button onclick="protectedAPI()">Get Access Token</button>
+<div id="protectedMessage"></div>
+<hr>
+
+GitHub repository:
+<a href="https://github.com/brunasti/recipes-application">https://github.com/brunasti/recipes-application</a>
+<hr>
+
 <script>
   let token = null;
   async function protectedAPI(){

@@ -1,6 +1,19 @@
 #Implementation
 
 
+## General consideration
+
+The RecipesApplication provides 2 sets of different RESTful APIs:
+
+- final user oriented APIs as indicated by the requirement
+- full CRUD APIs for an admin a monitoring activity on the system
+
+The first set is the real output of the project, 
+while the second enable the test and check of the system from a developer perspective 
+and are not intended  for an end user access.
+Because of usability in the development the CRUD APIs have not been secured, 
+but could and should be locked if not completely removed in a production environment.
+
 ## Data Model
 
 ### Entity-Relationship model
@@ -45,3 +58,16 @@ but for project simplicity and time constrains I preferred to go brute force
 with code, which could be even not performance effective.
 
 
+## Testing with Postman
+
+Postman can be used to test the RecipesApplication APIs.
+
+A Collection of  predefined requests for Postman are provided in the attached repository file:
+
+[Postmen collection](./ABN-AMRO.postman_collection.json)
+
+To execute the test in Postman you first have to create a Token:
+
+0. start the RecipesApplication 
+1. in a browser open the URL: http://localhost:8080/
+2. 

@@ -18,6 +18,8 @@ You can find more info and documentation about this project in the "[./documenta
 
 [Architecture](./documentation/solution/architecture.md)
 
+[Implementation](./documentation/solution/implementation.md)
+
 
 ## Execution
 

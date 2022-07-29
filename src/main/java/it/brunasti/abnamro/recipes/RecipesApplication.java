@@ -11,7 +11,7 @@ public class RecipesApplication {
 	// DONE - rewrite UserServiceImpl to use the DAO classes and tables
 	// DONE - check user access to recipes not owned by him/her
 	// DONE - query by example search
-		//1. Whether or not the dish is vegetarian - OK
+		//1. If the dish is vegetarian or not - OK
 		//2. The number of servings - OK
 		//3. Specific ingredients (either include or exclude) - OK
 		//4. Text search within the instructions. - OK

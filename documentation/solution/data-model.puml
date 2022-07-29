@@ -13,11 +13,8 @@ class User as "ApplicationUser" << (S,#3388FF) >>
 
 note top of User
  This ApplicationUser entity
- is intended as a place holder
- for the company LDAP ore IAM
- system, which for semplicity
- I have here implemented via
- JWT and a DAO object
+ is intended as a placeholder
+ for the company IAM system
 end note
 
 class Recipe << (E,#008800) >>
@@ -39,7 +36,7 @@ class Ingredient << (E,#008800) >>
 }
 
 
-Recipe::owner_user_id -u-> User::id
+Recipe::owner_id -u-> User::id
 
 
 class RecipeIngredientRelation  << (R,#00CC00) >>
@@ -53,11 +50,10 @@ class RecipeIngredientRelation  << (R,#00CC00) >>
 note top of RecipeIngredientRelation
  This RecipeIngredientRelation entity
  connect the Recipe with the Ingredient,
- so to create the N-M relation between
+ creating the N-M relation between
  the two entities, and enabling
- the storage of even one more
- relation-dependent info which is
- the quantity
+ the storage of the relation dependent
+ info quantity
 end note
 
 
