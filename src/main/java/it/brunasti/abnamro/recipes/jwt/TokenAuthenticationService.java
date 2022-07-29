@@ -8,22 +8,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+//import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Singleton;
 import java.util.Objects;
 import java.util.Optional;
 
-import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
 
-@Component
+@Service
 @Singleton
 @Slf4j
-//@Service
 @AllArgsConstructor
-//@AllArgsConstructor(access = PACKAGE)
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public final class TokenAuthenticationService implements UserAuthenticationService {
 
@@ -31,6 +28,7 @@ public final class TokenAuthenticationService implements UserAuthenticationServi
 
   @Autowired
   TokenService tokenService;
+
   @Autowired
   UserService users;
 

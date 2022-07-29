@@ -13,7 +13,6 @@ import java.util.List;
 @Builder
 @ToString
 public class RecipeRequest {
-//    private String ownerId;
     private String name;
     private String instructions;
     private int servings;

@@ -2,7 +2,6 @@ package it.brunasti.abnamro.recipes;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
 public class RecipesApplication {
@@ -21,10 +20,10 @@ public class RecipesApplication {
 	// - add more unit tests for coverage
 	// - add integration tests
 	// DONE - document how to start
-	// - document how to use the token in Postman
+	// DONE - document how to use the token in Postman
 	// - document API calls and parameters
 	// - define the error responses
-	// - clean code
+	// DONE - clean code
 
 	public static void main(String[] args) {
 

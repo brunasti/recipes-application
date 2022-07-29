@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RestController("recipesApplicationController")
 @RequestMapping(value = "", name="RecipesApplication RESTful APIs")
-class ApplicationController {
+public class ApplicationController {
 	private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
 	private final RecipesService recipeService;

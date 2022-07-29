@@ -33,7 +33,6 @@ class UsersCRUDController {
 	// Aggregate root
 
 	// tag::get-aggregate-root[]
-//	@RequestMapping(value = "", method= RequestMethod.GET)
 	@GetMapping("/crud/application_users")
 	CollectionModel<EntityModel<ApplicationUser>> all() {
 		List<EntityModel<ApplicationUser>> applicationUsers = repository.findAll().stream()
