@@ -22,7 +22,7 @@ GitHub repository:
     let headers = {};
     document.getElementById("protectedMessage").innerHTML = "-----";
     if (token) headers["Authorization"] = "Bearer " + token;
-    let response = await fetch("/protected", {
+    let response = await fetch("/protected/jwt", {
       headers
     });
     let text = await response.text();
@@ -44,10 +44,10 @@ GitHub repository:
       let text = await response.text();
       token = text;
       document.getElementById("login-msg").innerHTML = "Login success";
+      document.getElementById("protectedMessage").innerHTML = "--";
     } else {
       document.getElementById("login-msg").innerHTML = "Failed to login: " + response.status;
+      document.getElementById("protectedMessage").innerHTML = "--";
     }
-    //alert(text);
-    //document.getElementById("protectedMessage").innerHTML = text;
   }
 </script>

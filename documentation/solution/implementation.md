@@ -1,4 +1,4 @@
-#Implementation
+# Implementation and Test
 
 
 ## General consideration
@@ -14,6 +14,15 @@ and are not intended  for an end user access.
 Because of usability in the development the CRUD APIs have not been secured, 
 but could and should be locked if not completely removed in a production environment.
 
+
+## Authorized users
+This is a list of authorized users:
+
+|Username|Password|Note|
+|---|---|---|
+|paolo|brunasti|main user, has 3 recipes|
+|mario|bross|alternative user with just 1 recipe|
+
 ## Data Model
 
 ### Entity-Relationship model
@@ -23,7 +32,14 @@ but could and should be locked if not completely removed in a production environ
 
 #### Recipe
 
+The recipe, uniquely identified by a name and an owner.
+
+There can be different recipes with the same name but belonging to different users. 
+
 #### Ingredient
+
+An ingredient that can be used in multiple recipes.
+It must have an unique name, and could be used by multiple users.
 
 #### RecipeIngredientRelation
 This entity implement the relation between the Recipe and the Ingredient, so to allow a N-M cardinality, and storing the quantity of a particular ingredient in the specific recipe.
@@ -37,13 +53,49 @@ The password is not encrypted  just because of not enough time to cover all the 
 ## Packaging
 
 ### it.brunasti.abnamro.recipes
+
+
+### it.brunasti.abnamro.recipes.controllers
+
+Controller classes which define the RESTful API Endpoints and match the business logic calls.
+
+#### CRUD
+For simplicity the CRUD endpoints for the database tables include even the business logic.
+
+#### ApplicationController
+The main controller is <b>ApplicationController</b>, which implements the required RESTful APIs endpoints 
+and forwards the requests to the RecipesService.
+
+
 ### it.brunasti.abnamro.recipes.db
+
+JPA and DAO classes mapping the database tables.
+
+For each table there are two classes:
+- [table].class : JPA entity
+- [table]Repository.class : JpaRepository extension which defines the extra query functions 
+
+
 ### it.brunasti.abnamro.recipes.exceptions
+
+Application Exceptions classes.
+
 ### it.brunasti.abnamro.recipes.jwt
+
+Security classes for both authentication and JWT functions.
+
+
 ### it.brunasti.abnamro.recipes.requests
+
+RESTful API request resources.
+
 ### it.brunasti.abnamro.recipes.responses
+
+RESTful API response resources.
+
 ### it.brunasti.abnamro.recipes.services
 
+Business logic classes, which coordinate the creation and retrieve logic with the underlaying persistence classes. 
 
 ## Query-by-example feature
 
@@ -70,4 +122,27 @@ To execute the test in Postman you first have to create a Token:
 
 0. start the RecipesApplication 
 1. in a browser open the URL: http://localhost:8080/
-2. 
+2. execute the login with the parameters: 
+- username: paolo
+- password: brunasti
+3. Press the "Get Access Token" button
+4. Copy the highlighted string of the Access Token which is shown just below between '[' and ']', but without the square brackets and the spaces.
+5. Go to Postman
+6. In one of the requests in the ABN-AMRO collection open the "Authorization" tab
+7. Select as "Type" : "Bearer Token"
+8. On the right side of the "Authorization" panel, in the "Token" field, paste the value you copied from the browser page
+9. "Send" the request
+
+
+If required or desired, there is a second user:
+- username: mario
+- password: bross
+
+This user can be used to try accessing the recipes of the other user "paolo"
+
+
+## Possible improvements
+
+### Use of SessionAttribute for the JWT
+
+

@@ -79,6 +79,16 @@ class LoadDatabase {
 			user = ApplicationUser.builder().id("mario").username("mario").password("bross").build();
 			log.info("Preloading " + applicationUserReporitory.save(user));
 			users.save(user);
+
+			crostini = Recipe.builder().ownerId(user.getId()).name("crostini").instructions("toast bread and put oil on it").servings(4).build();
+			log.info("Preloading " + recipeRepository.save(crostini));
+
+			log.info("Preloading " + recipeIngredientRelationRepository.save(
+					RecipeIngredientRelation.builder().recipeId(crostini.getId()).ingredientId(pane.getId()).quantity(BigDecimal.valueOf(4)).build()));
+			log.info("Preloading " + recipeIngredientRelationRepository.save(
+					RecipeIngredientRelation.builder().recipeId(crostini.getId()).ingredientId(olio.getId()).quantity(BigDecimal.valueOf(10)).build()));
+
+
 		};
 	}
 }

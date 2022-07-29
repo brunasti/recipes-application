@@ -1,4 +1,4 @@
-package it.brunasti.abnamro.recipes;
+package it.brunasti.abnamro.recipes.controllers;
 
 import it.brunasti.abnamro.recipes.db.RecipeIngredientRelation;
 import it.brunasti.abnamro.recipes.db.RecipeIngredientRelationRepository;
@@ -33,7 +33,6 @@ class RecipeIngredientRelationsCRUDController {
 	// Aggregate root
 
 	// tag::get-aggregate-root[]
-//	@RequestMapping(value = "", method= RequestMethod.GET)
 	@GetMapping("/crud/recipe_ingredient_relations")
 	CollectionModel<EntityModel<RecipeIngredientRelation>> all() {
 		List<EntityModel<RecipeIngredientRelation>> recipeIngredientRelations = repository.findAll().stream()

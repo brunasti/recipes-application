@@ -1,0 +1,317 @@
+{
+	"info": {
+		"_postman_id": "f46230f5-41cc-4d43-b5b8-53debbb9ad96",
+		"name": "ABN-AMRO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15962735"
+	},
+	"item": [
+		{
+			"name": "Get Recipes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/crud/recipes/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crud",
+						"recipes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APP Delete Recipe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWyiwuVrJSSioqzUssLslU0lHKTCxRsjI0M7U0MDIxtTTSUSotTi3KS8xNBSorSMzPyVeqBQBCdu5ZNgAAAA.wYdbCpC6AlW4DYJARWIog6WQMr3bTSInLFgRv8vWc_A",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/recipes/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"recipes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Recipe",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ownerId\": 1,\n    \"name\": \"spaghetti al burro 2\",\n    \"instructions\": \"Boil water\",\n    \"servings\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/recipes",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"recipes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Ingredients",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/crud/ingredients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crud",
+						"ingredients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Application Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/crud/application_users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crud",
+						"application_users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Recipe Ingredient Relations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/crud/recipe_ingredient_relations",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"crud",
+						"recipe_ingredient_relations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APP Get 1 Recipe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWyiwuVrJSSioqzUssLslU0lHKTCxRsjI0M7U0MDK0MDXWUSotTi3KS8xNBSorSMzPyVeqBQDFs2NQNgAAAA.fzif08goOBa9IGB7Oaig33IdnV--QIrjUtnc2RAv9OM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/recipes/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"recipes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APP Update Recipe",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ownerId\": \"paolo\",\n    \"name\": \"spaghetti al burro\",\n    \"instructions\": \"bollire acqua\",\n    \"servings\": 2,\n    \"vegetarian\": false,\n    \"ingredients\": [\n        {\n            \"name\": \"penne\",\n            \"description\": \"penne di grano duro\",\n            \"unit\": \"g\",\n            \"vegetarian\": true,\n            \"quantity\": 250.00\n        },\n        {\n            \"name\": \"burro\",\n            \"description\": \"burro di latte vaccino\",\n            \"unit\": \"g\",\n            \"vegetarian\": false,\n            \"quantity\": 10.00\n        },\n        {\n            \"name\": \"acqua\",\n            \"description\": \"H2O\",\n            \"unit\": \"ml\",\n            \"vegetarian\": true,\n            \"quantity\": 2.00\n        },\n        {\n            \"name\": \"sale\",\n            \"description\": \"NaCl\",\n            \"unit\": \"g\",\n            \"vegetarian\": true,\n            \"quantity\": 1.00\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/recipes/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"recipes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APP Create Recipe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWyiwuVrJSSioqzUssLslU0lHKTCxRsjI0M7U0MDK0MDXWUSotTi3KS8xNBSorSMzPyVeqBQDFs2NQNgAAAA.fzif08goOBa9IGB7Oaig33IdnV--QIrjUtnc2RAv9OM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ownerId\": \"paolo\",\n    \"name\": \"penne al y\",\n    \"instructions\": \"Boil water\",\n    \"servings\": 2,\n    \"vegetarian\": false,\n    \"ingredients\": [\n        {\n            \"name\": \"penne\",\n            \"description\": \"spaghetti di grano duro\",\n            \"unit\": \"g\",\n            \"vegetarian\": true,\n            \"quantity\": 200.00\n        },\n        {\n            \"name\": \"burro\",\n            \"description\": \"burro di latte vaccino\",\n            \"unit\": \"g\",\n            \"vegetarian\": false,\n            \"quantity\": 10.00\n        },\n        {\n            \"name\": \"acqua\",\n            \"description\": \"H2O\",\n            \"unit\": \"ml\",\n            \"vegetarian\": true,\n            \"quantity\": 2.00\n        },\n        {\n            \"name\": \"sale\",\n            \"description\": \"NaCl\",\n            \"unit\": \"g\",\n            \"vegetarian\": true,\n            \"quantity\": 1.00\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/recipes",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"recipes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APP Get All Recipes",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWyiwuVrJSSioqzUssLslU0lHKTCxRsjI0M7U0MDK0MDXWUSotTi3KS8xNBSorSMzPyVeqBQDFs2NQNgAAAA.fzif08goOBa9IGB7Oaig33IdnV--QIrjUtnc2RAv9OM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/recipes",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"recipes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APP Get All Recipes - veg",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWyiwuVrJSSioqzUssLslU0lHKTCxRsjI0M7U0MDK1sDTVUSotTi3KS8xNBSorSMzPyVeqBQBcnboqNgAAAA.3KCJ9rUIcxofmS3C5uLBezRcG38zD_oFfS-SsSVj0W4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/recipes?vegetarian=true&servings=2&instructions=wat&excludeIngredients=pane&includeIngredients=olio",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"recipes"
+					],
+					"query": [
+						{
+							"key": "vegetarian",
+							"value": "true"
+						},
+						{
+							"key": "servings",
+							"value": "2"
+						},
+						{
+							"key": "instructions",
+							"value": "wat"
+						},
+						{
+							"key": "excludeIngredients",
+							"value": "pane"
+						},
+						{
+							"key": "includeIngredients",
+							"value": "olio"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

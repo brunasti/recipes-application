@@ -2,6 +2,7 @@ package it.brunasti.abnamro.recipes;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
 public class RecipesApplication {
@@ -16,6 +17,7 @@ public class RecipesApplication {
 		//3. Specific ingredients (either include or exclude) - OK
 		//4. Text search within the instructions. - OK
 	// - add API input validations as RequestParam
+		// 1.ExceptionHandler
 	// - add more unit tests for coverage
 	// - add integration tests
 	// DONE - document how to start

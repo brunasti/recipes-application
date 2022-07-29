@@ -36,8 +36,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Singleton
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-public class RecipeService {
-    private static final Logger logger = LoggerFactory.getLogger(RecipeService.class);
+public class RecipesService {
+    private static final Logger logger = LoggerFactory.getLogger(RecipesService.class);
 
     private final RecipeRepository recipeRepository;
     private final IngredientRepository ingredientRepository;

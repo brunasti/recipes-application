@@ -1,4 +1,4 @@
-package it.brunasti.abnamro.recipes;
+package it.brunasti.abnamro.recipes.controllers;
 
 import it.brunasti.abnamro.recipes.db.ApplicationUser;
 import it.brunasti.abnamro.recipes.db.ApplicationUserReporitory;
