@@ -1,5 +1,6 @@
 package it.brunasti.abnamro.recipes.services;
 
+import it.brunasti.abnamro.recipes.Utils;
 import it.brunasti.abnamro.recipes.db.ApplicationUser;
 import it.brunasti.abnamro.recipes.db.Ingredient;
 import it.brunasti.abnamro.recipes.db.IngredientRepository;
@@ -21,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
 @Singleton
@@ -68,11 +69,18 @@ public class RecipeService {
     }
 
     public EntityModel<RecipesListResponse> retrieveRecipes(String token,
-        Boolean vegetarian, Integer servings
+                                                            Boolean vegetarian,
+                                                            String instructions,
+                                                            String[] includeIngredients,
+                                                            String[] excludeIngredients,
+                                                            Integer servings
     ) {
         logger.info("retrieveRecipes");
         logger.info("retrieveRecipes token : [" + token + "]");
         logger.info("retrieveRecipes vegetarian : ["+vegetarian+"]");
+        logger.info("retrieveRecipes instructions : ["+instructions+"]");
+        logger.info("retrieveRecipes includeIngredients : ["+ Utils.arrayDump(includeIngredients)+"]");
+        logger.info("retrieveRecipes excludeIngredients : ["+Utils.arrayDump(excludeIngredients)+"]");
         logger.info("retrieveRecipes servings : ["+servings+"]");
 
         RecipesListResponse recipesListResponse = new RecipesListResponse();
@@ -92,22 +100,58 @@ public class RecipeService {
                     RecipeResponse recipeResponse = buildRecipeResponse(recipe);
 
                     boolean add = true;
-                    boolean addVeg = true;
-                    boolean addServ = true;
+                    boolean excludeVeg = false;
+                    boolean excludeServ = false;
+                    boolean excludeInstr = false;
+                    AtomicBoolean excludeIngr = new AtomicBoolean(false);
+                    AtomicBoolean includeIngr = new AtomicBoolean(true);
 
                     if (vegetarian != null) {
                         if (!vegetarian.equals(recipeResponse.getVegetarian())) {
-                            addVeg = false;
+                            excludeVeg = true;
                         }
                     }
 
                     if (servings != null) {
                         if (!servings.equals(recipeResponse.getServings())) {
-                            addServ = false;
+                            excludeServ = true;
                         }
                     }
 
-                    if (!addVeg || !addServ) {
+                    if (instructions != null) {
+                        if (!recipeResponse.getInstructions().toUpperCase().contains(instructions.toUpperCase())) {
+                            excludeInstr = true;
+                        }
+                    }
+
+                    if (includeIngredients != null) {
+                        includeIngr.set(false);
+                        for (int i=0; i<includeIngredients.length; i++) {
+                            int finalI = i;
+                            recipeResponse.getIngredients().forEach(ingredientResponse -> {
+                                if (ingredientResponse.getName().equalsIgnoreCase(includeIngredients[finalI])) {
+                                    logger.info("retrieveRecipes recipe INCLUDE for INGREDIENT : " + recipe.getName() + " ["+ingredientResponse.getName()+"]");
+                                    includeIngr.set(true);
+                                }
+                            });
+                        }
+                    }
+
+                    if (excludeIngredients != null) {
+                        for (int i=0; i<excludeIngredients.length; i++) {
+                            int finalI = i;
+                            recipeResponse.getIngredients().forEach(ingredientResponse -> {
+                                if (ingredientResponse.getName().equalsIgnoreCase(excludeIngredients[finalI])) {
+                                    logger.info("retrieveRecipes recipe EXCLUDE for INGREDIENT : " + recipe.getName() + " ["+ingredientResponse.getName()+"]");
+                                    excludeIngr.set(true);
+                                }
+                            });
+                        }
+                    }
+
+                    logger.info("retrieveRecipes recipe EXCLUDE : " + recipe.getName()
+                            + " ["+excludeVeg+"] ["+excludeServ+"] ["+excludeInstr+"] ["+excludeIngr.get()+"] ["+includeIngr.get()+"]");
+                    if (excludeVeg || excludeServ || excludeInstr || excludeIngr.get() || !includeIngr.get()) {
                         add = false;
                     }
 

@@ -30,7 +30,7 @@ class LoadDatabase {
 			Recipe spaghettiAlBurro = Recipe.builder().ownerId(user.getId()).name("spaghetti al burro").instructions("Boil water").servings(2).build();
 			log.info("Preloading " + recipeRepository.save(spaghettiAlBurro));
 
-			Recipe spaghettiOlio = Recipe.builder().ownerId(user.getId()).name("spaghetti all'olio").instructions("Boil water").servings(2).build();
+			Recipe spaghettiOlio = Recipe.builder().ownerId(user.getId()).name("spaghetti all'olio").instructions("Boil water").servings(3).build();
 			log.info("Preloading " + recipeRepository.save(spaghettiOlio));
 
 			Recipe crostini = Recipe.builder().ownerId(user.getId()).name("crostini").instructions("toast bread").servings(4).build();
@@ -51,13 +51,13 @@ class LoadDatabase {
 			log.info("Preloading " + ingredientRepository.save(pane));
 
 			log.info("Preloading " + recipeIngredientRelationRepository.save(
-					RecipeIngredientRelation.builder().recipeId(spaghettiOlio.getId()).ingredientId(spaghetti.getId()).quantity(BigDecimal.valueOf(100)).build()));
+					RecipeIngredientRelation.builder().recipeId(spaghettiOlio.getId()).ingredientId(spaghetti.getId()).quantity(BigDecimal.valueOf(150)).build()));
 			log.info("Preloading " + recipeIngredientRelationRepository.save(
 					RecipeIngredientRelation.builder().recipeId(spaghettiOlio.getId()).ingredientId(olio.getId()).quantity(BigDecimal.valueOf(20)).build()));
 			log.info("Preloading " + recipeIngredientRelationRepository.save(
-					RecipeIngredientRelation.builder().recipeId(spaghettiOlio.getId()).ingredientId(acqua.getId()).quantity(BigDecimal.valueOf(2000)).build()));
+					RecipeIngredientRelation.builder().recipeId(spaghettiOlio.getId()).ingredientId(acqua.getId()).quantity(BigDecimal.valueOf(3000)).build()));
 			log.info("Preloading " + recipeIngredientRelationRepository.save(
-					RecipeIngredientRelation.builder().recipeId(spaghettiOlio.getId()).ingredientId(sale.getId()).quantity(BigDecimal.valueOf(10)).build()));
+					RecipeIngredientRelation.builder().recipeId(spaghettiOlio.getId()).ingredientId(sale.getId()).quantity(BigDecimal.valueOf(15)).build()));
 
 			log.info("Preloading " + recipeIngredientRelationRepository.save(
 					RecipeIngredientRelation.builder().recipeId(spaghettiAlBurro.getId()).ingredientId(spaghetti.getId()).quantity(BigDecimal.valueOf(100)).build()));
